@@ -68,12 +68,10 @@ class Measurement:
             np.random.normal(mean, np.sqrt(var),n_samples) 
         For each attenuation coefficient -> 
             for var, n_samples, mean in zip(self.variance(), self.samples, self.mean()
-        Combines into a single array -> 
-            np.concatenate(...)
 
         Return
         ------
-        np.ndarray[r1_samples + r2_samples]
+        np.ndarray[r1_samples, r2_samples]
         """
         return [
             np.random.normal(
@@ -259,10 +257,10 @@ class Hybrid_Attack(Measurement):
             D, λ = vars
             N_hyb = N_0 / λ + (1 - self.r[0] * self.r[1]) * D**2 + (35.81 - 35.47 * self.r[0] * self.r[1]) * D
 
-            # Вычисляем ξ_hyb / N_hyb
+            # Solve ξ_hyb / N_hyb
             ξ_hyb_N_hyb = ((2 + N_tech) * N_0 + (self.r[0] + self.r[1] - 2) * D ** 2) / (D_eff * T_ch) + 35.47 * (self.r[0] + self.r[1]) * D
 
-            # Минимизируем ξ_hyb / N_hyb
+            # Minimaze ξ_hyb / N_hyb
             return ξ_hyb_N_hyb / N_hyb
         
         
@@ -272,7 +270,7 @@ class Hybrid_Attack(Measurement):
 
         con = {'type': 'eq', 'fun': constraint}
 
-        # Минимизируем функцию objective с ограничением con и начальным приближением x0
+        # Minimize the objective function with constraint con and initial approximation x0
         result = minimize(equation, x0, bounds=bounds, constraints=con)
         return result.x
     
@@ -284,7 +282,7 @@ class Hybrid_Attack2(Measurement):
     @override
     def variance(self) -> np.ndarray:
         f_ext = 0.1
-        I_ext = 11 * 10 ** 6
+        I_ext = 9 * 10 ** 6
         R = I_ext / I_lo
         N_ext = 4 * T_ext * (1 - T_ext) * R / T_ch + R**2 * D_eff * f_ext**2 * (1 - 2*T_ext)**2 * I_lo / T_ch
         N_hyb2 = N_tech + 2 * N_0 + N_ext
@@ -292,6 +290,6 @@ class Hybrid_Attack2(Measurement):
     
     @override
     def mean(self) -> np.ndarray:
-        I_ext = 11 * 10 ** 6
+        I_ext = 9 * 10 ** 6
         mean = (D_eff/I_lo)**(1/2) * ( 1 - 2 * T_ext) * I_ext
         return np.array([mean, mean])

@@ -19,10 +19,9 @@ class Features:
     Class of Bob's distribution features, used to generate a set of feature vectors for further processing.
     """
 
-    def __init__(self, blocks: np.ndarray, attack_coef: float = 1, kast:float = 1) -> None:
+    def __init__(self, blocks: np.ndarray, attack_coef: float = 1) -> None:
         self.blocks = blocks
         self.coef = attack_coef
-        self.kast = kast
 
 
     def generate(self) -> np.ndarray:
@@ -43,8 +42,7 @@ class Features:
     
     def shot_noise(self, block: np.ndarray) -> float:
         
-        # return np.random.normal(N_0, N_0 * F_per)
-       
+        # return np.random.normal(N_0, N_0 * F_per)    
         return (np.var(block) - N_el - N_tech * r[1] * D_eff * T_ch) / (1 + r[1] * D_eff * T_ch) 
     
     def lo_intensity(self, coef: float = 1) -> float:

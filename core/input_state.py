@@ -11,7 +11,7 @@ class InputState:
 
     @property
     def value(self) -> np.ndarray:
-        """Возвращает состояние как вектор np.ndarray формы 
+        """Returns the state as a vector of the form np.ndarray 
         [mean_v, variance, lo_intensity, shot_noise]
 
         Returns
